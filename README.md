@@ -58,6 +58,7 @@ To maintain complete metric integrity across platforms, complex Power BI DAX mea
 ---
 
 ## 📁 Repository Structure
+```
 bundesliga-tableau/
 │
 ├── visuals/
@@ -65,5 +66,6 @@ bundesliga-tableau/
 │
 ├── Bundesliga_Analysis.twbx        # Packaged Tableau Workbook file
 └── README.md
+```
 ---
 *Developed as part of an advanced data analytics portfolio focusing on scalable, cross-platform BI architectures.
