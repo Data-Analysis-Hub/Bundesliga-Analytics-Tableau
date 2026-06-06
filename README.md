@@ -4,35 +4,66 @@
 [![PySpark](https://img.shields.io/badge/PySpark-E25A1C?style=flat&logo=apachespark&logoColor=white)](https://spark.apache.org/docs/latest/api/python/index.html)
 [![Tableau](https://img.shields.io/badge/Tableau-E97628?style=flat&logo=tableau&logoColor=white)](https://public.tableau.com/)
 
-> **Project Note:** This repository contains the **Tableau-driven Business Intelligence layer** for my comprehensive Bundesliga data engineering pipeline. It is the visual companion and reporting extension of the core PySpark & Power BI repository found here: [pyspark-football](https://github.com/Data-Analysis-Hub/pyspark-football).
+> **🎯 Technology Agnosticism Showcase:** This repository contains a complete rebuild of the semantic and visual reporting layer using **Tableau**. It directly consumes the standardized data assets produced by my core PySpark data engineering pipeline, matching the look, logic, and KPIs of my original Power BI implementation. 
+> 
+> 🔗 **Core Data Pipeline & Power BI Repo:** [pyspark-football](https://github.com/Data-Analysis-Hub/pyspark-football)
+
+---
+
+## 🚀 Live Interactive Dashboard
+The complete interactive workbook is published and available on Tableau Public. You can explore the filters, drill down into seasonal eras, and interact with the data models live:
+
+👉 **[View the Live Interactive Dashboard on Tableau Public](https://public.tableau.com/app/profile/hamza.khiar/viz/Bundesliga_Analysis/FinalDashboard)**
+
+---
+
+## 📊 Tableau Dashboard Preview
+
+![Tableau Dashboard](visuals/tableau_dashboard.png)
 
 ---
 
 ## 📌 Project Overview
 This project analyzes **16 seasons of historical German Bundesliga data (18 teams)** to uncover deep historical trends, seasonal team dynamics, and core performance metrics. 
 
-By leveraging **PySpark** for scalable data processing and optimization, the raw dataset was transformed into an enterprise-ready dimensional model. This specific repository focuses on delivering interactive, high-impact executive dashboards built in **Tableau** to translate complex statistical results into actionable stakeholder insights.
+By separating the heavy transformation processing (**PySpark**) from the consumption layer (**Tableau**), the architecture demonstrates clean, enterprise-grade decoupling. The metrics, filtering, and core visual structures are precisely mapped to showcase adaptive reporting capabilities across top-tier BI suites.
 
 ---
 
-## 🏗️ Architecture & Data Workflow
+## 🏗️ Architecture & Decoupled Data Workflow
 
-1. **Data Ingestion & Processing:** Raw data is processed using **PySpark** to handle historical volume efficiently.
-2. **Storage Optimization:** Data structures are optimized and saved using high-performance **Parquet** formatting.
-3. **Data Modeling:** Transformed data is structured into a clean **Star Schema** optimized for BI tool performance and complex relational query speeds.
-4. **Analytics & Visualization:** **Tableau** dashboards are deployed to deliver comprehensive performance breakdowns, including custom "Team DNA" quadrant analyses.
-
----
-
-## 📊 Dashboard Key Features
-* **Executive Performance Tracking:** High-level overview of team standings, win/loss ratios, and historical trajectories across 16 seasons.
-* **Team DNA (Quadrant Analysis):** Advanced scatter plots tracking offensive efficiency vs. defensive resilience to classify team playing styles.
-* **Seasonal Trend Drills:** Dynamic time-series filtering allowing stakeholders to isolate specific eras, seasonal peaks, or relegated team statistics.
+1. **Processing Layer:** Raw match data is ingested and wrangled using **PySpark** (Google Colab / Databricks) to handle historical volumes and compile complex season-over-season aggregations.
+2. **Storage Optimization:** Optimized analytical files are exported using compressed, columnar **Parquet** formatting, partitioned by `Season`.
+3. **Consumption Layer (Tableau):** Tableau connects natively to the partitioned Parquet outputs, optimizing query performance by reading only the necessary seasonal folders.
 
 ---
 
-## 🚀 Status
-🔧 **In Progress:** The PySpark data pipeline and Parquet files are complete. The final Tableau workbook (`.twbx`) and high-resolution dashboard screenshots are currently being published and uploaded. 
+## 🔀 Mapping Logic: DAX to Tableau Calculations
+
+To maintain complete metric integrity across platforms, complex Power BI DAX measures were fully translated into optimized Tableau Calculated Fields:
+
+| Metric | Power BI DAX Expression | Tableau Calculated Field |
+| :--- | :--- | :--- |
+| **Total Games** | `DIVIDE(SUM(TotalGames), 2)` | `SUM([Total Games]) / 2` |
+| **Home Win %** | `DIVIDE(SUM(TotalHomeWin), SUM(TotalHomeWin) + ...)` | `SUM([TotalHomeWin]) / (SUM([TotalHomeWin]) + SUM([TotalHomeTie]) + SUM([TotalHomeLoss]))` |
+| **Home Goal Diff** | `SUM(HomeScoredGoals) - SUM(HomeAgainstGoals)` | `SUM([HomeScoredGoals]) - SUM([HomeAgainstGoals])` |
 
 ---
-*Developed as part of an advanced data analytics portfolio focusing on scalable BI architectures.*
+
+## 📈 Dashboard Key Visual Features
+* **Executive Performance KPIs:** High-level cards tracking absolute numbers across 16 seasons including Total Games, Goals, and Average Metrics.
+* **Team DNA Quadrant Analysis:** An advanced scatter plot charting Home Win % vs Away Win % with an explicitly calculated median reference boundary to classify team tactical profiles into quadrants.
+* **Historical Position Tracker:** Detailed temporal matrices outlining precise final team positions parsed dynamically across seasonal cycles.
+
+---
+
+## 📁 Repository Structure
+bundesliga-tableau/
+│
+├── visuals/
+│   └── tableau_dashboard.png       # High-resolution dashboard capture
+│
+├── Bundesliga_Analysis.twbx        # Packaged Tableau Workbook file
+└── README.md
+---
+*Developed as part of an advanced data analytics portfolio focusing on scalable, cross-platform BI architectures.
